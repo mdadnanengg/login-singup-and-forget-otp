@@ -7,7 +7,7 @@ let empController = async (req,res)=>{
     console.log("userpass",pass)
     try {
         let result= await validateUser(user,pass);
-        // console.log("result",result);
+        console.log("result",result);
         if (result === "success") {
             res.render('dashboard.ejs',{name:user})
         }else{

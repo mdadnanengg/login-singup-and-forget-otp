@@ -22,36 +22,42 @@ app.get('/',(req , res)=>{
 });
 
 app.get('/forget',(req,res)=>{
-    let otp = otpGenerator.generate(4, { upperCaseAlphabets: false, specialChars: false , lowerCaseAlphabets:false});
+    res.render('forget.ejs')
+
+    function sendOtp() {
+        let otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false , lowerCaseAlphabets:false});
     console.log(otp)
-})
 
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com' ,
-    service: 'gmail' ,
-    secure: true ,
-    port: 587 ,
-    auth: {
-        user: 'mdadnanmdyaseen@gmail.com' ,
-        pass: process.env.pass ,
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com' ,
+        service: 'gmail' ,
+        secure: true ,
+        port: 587 ,
+        auth: {
+            user: 'mdadnanmdyaseen@gmail.com' ,
+            pass: process.env.pass ,
+        }
+    })
+
+    let email = empController.name
+    
+    const mailOption = {
+        from: 'mdadnanmdyaseen@gmail.com' ,
+        to: `mdadnanengg@gmail.com`,
+        subject: 'test' ,
+        text: 'hi adnan' ,
+        html: `<h1> Your OTP IS ${otp} <h1/>`
     }
-})
-
-const mailOption = {
-    from: 'mdadnanmdyaseen@gmail.com' ,
-    to: ['anasmomin001100@gmail.com','mdadnanengg@gmail.com','mustafamj805@gmail.com'],
-    subject: 'test' ,
-    text: 'hi adnan' ,
-    html: `<h1> Your OTP IS 123456 <h1/>`
-}
-
-transporter.sendMail(mailOption,(err, info)=>{
-    if (err) throw err
-    console.log(info)
-    setTimeout(()=>{
-        otp = null
-        console.log(otp)
-    },5000)
+    
+    transporter.sendMail(mailOption,(err, info)=>{
+        if (err) throw err
+        console.log(info)
+        setTimeout(()=>{
+            otp = null
+            console.log(otp)
+        },5000)
+    })
+    }
 })
 
 
